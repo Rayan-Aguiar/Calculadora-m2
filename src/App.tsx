@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Input, Select, Option, Button } from "@material-tailwind/react";
+import { Input } from "@material-tailwind/react";
 
 function App(): JSX.Element {
   const [numeroTiragem, setNumeroTiragem] = useState<number>(0);
@@ -20,16 +20,16 @@ function App(): JSX.Element {
   };
 
   const calcular = (): void => {
-    if (numeroTiragem === '' || numeroImagem === '' || corteFolha === '') {
+    if (isNaN(numeroTiragem) || isNaN(numeroImagem) || isNaN(corteFolha)) {
       setMostrarResultados(false);
       setCamposVazios(true);
     } else {
-      const resultadoUm: number = Number(numeroTiragem) / Number(numeroImagem) / Number(corteFolha);
+      const resultadoUm: number = numeroTiragem / numeroImagem / corteFolha;
       setResultadoUm(resultadoUm);
-
-      const resultadoDois: number = (Number(numeroTiragem) / Number(numeroImagem)) * entregemMaquina;
+  
+      const resultadoDois: number = (numeroTiragem / numeroImagem) * entregemMaquina;
       setResultadoDois(resultadoDois);
-
+  
       setMostrarResultados(true);
       setCamposVazios(false);
     }
@@ -38,7 +38,7 @@ function App(): JSX.Element {
   return (
     <div className='bg-zinc-300 w-screen min-h-screen h-fit p-12 '>
       <div className="flex flex-col justify-center items-center gap-8 container">
-        <h1 className="text-5xl	font-bold text-zinc-800">Calcular montagem de chapa</h1>
+        <h1 className="text-4xl	font-bold text-zinc-800 uppercase">Calcular montagem de chapa</h1>
 
         <div className="mt-8 flex gap-2 w-full">
           <select name="Produto" className="w-full p-2 bg-transparent border border-zinc-400 rounded-md" >
@@ -61,19 +61,15 @@ function App(): JSX.Element {
         </div>
 
         <div className=" flex gap-2 w-full">        
-          <Input label="Insira o numero da tiragem" type="number" onChange={(e) => setNumeroTiragem(parseFloat(e.target.value))} required/>
-          <Input label="Insira o numero de imagens" type="number" onChange={(e) => setNumeroImagem(parseFloat(e.target.value))} required/>
-          <Input label="Insira o numero de Cortes da folha" type="number" onChange={(e) => setCorteFolha(parseFloat(e.target.value))} required/>
+          <Input crossOrigin={undefined} label="Insira o numero da tiragem" type="number" onChange={(e) => setNumeroTiragem(parseFloat(e.target.value))} required/>
+          <Input crossOrigin={undefined} label="Insira o numero de imagens" type="number" onChange={(e) => setNumeroImagem(parseFloat(e.target.value))} required/>
+          <Input crossOrigin={undefined}label="Insira o numero de Cortes da folha" type="number" onChange={(e) => setCorteFolha(parseFloat(e.target.value))} required/>
         </div>
 
-        <Button color="green" className="text-zinc-800" onClick={calcular}>Calcular</Button>
+        <button className="text-zinc-800 bg-teal-400 px-3 py-2 rounded-lg hover:bg-teal-800 hover:text-zinc-100 duration-75 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 font-bold" onClick={calcular} >Calcular</button>
 
         {mostrarResultados && !camposVazios ? (
-          <div className='flex flex-col items-center justify-center'>
-
-            
-
-
+          <div className='flex flex-col items-center justify-center'>          
             <div className='flex gap-2 items-center'>
               <p>Quantidade de folhas: </p>
               <span className='font-bold text-lg'>{resultadoUm}</span>
