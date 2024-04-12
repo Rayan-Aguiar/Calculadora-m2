@@ -11,13 +11,26 @@ function App(): JSX.Element {
   const [resultadoDois, setResultadoDois] = useState<number>(0);
   const [mostrarResultados, setMostrarResultados] = useState<boolean>(false);
   const [camposVazios, setCamposVazios] = useState<boolean>(false);
+  const [opcaoImpressao, setOpcaoImpressao] = useState<string>("Frente");
 
   const handleImpressaoChange = (value: string): void => {
+    setOpcaoImpressao(value);
     if (value === "Frente") {
       setEntregemMaquina(1);
     } else {
       setEntregemMaquina(2);
     }
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      calcular();
+    }
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    handleImpressaoChange(e.target.value);
+    calcular();
   };
 
   const calcular = (): void => {
@@ -39,7 +52,7 @@ function App(): JSX.Element {
 
   return (
     <div
-      className="bg-zinc-950 w-screen min-h-screen h-fit p-12 flex justify-center items-center
+      className="bg-zinc-950 w-screen min-h-screen p-12 flex justify-center items-center
      "
     >
       <div className="flex flex-col justify-center items-center gap-6 w-[900px] border border-zinc-700 p-8 rounded-xl ">
@@ -51,7 +64,7 @@ function App(): JSX.Element {
           <select
             name="Impressão"
             className="w-full p-2 bg-transparent border border-zinc-400 rounded-md text-zinc-400 bg-zinc-950"
-            onChange={(e) => handleImpressaoChange(e.target.value)}
+            onChange={handleSelectChange}
           >
             <option>Frente</option>
             <option>Frente e Verso</option>
@@ -66,6 +79,7 @@ function App(): JSX.Element {
             label="Insira o numero da tiragem"
             type="number"
             onChange={(e) => setNumeroTiragem(parseFloat(e.target.value))}
+            onKeyPress={handleKeyPress}
             required
           />
           <Input
@@ -74,6 +88,7 @@ function App(): JSX.Element {
             label="Insira o numero de imagens"
             type="number"
             onChange={(e) => setNumeroImagem(parseFloat(e.target.value))}
+            onKeyPress={handleKeyPress}
             required
           />
           <Input
@@ -82,6 +97,7 @@ function App(): JSX.Element {
             label="Insira o numero de Cortes da folha"
             type="number"
             onChange={(e) => setCorteFolha(parseFloat(e.target.value))}
+            onKeyPress={handleKeyPress}
             required
           />
         </div>
@@ -97,16 +113,26 @@ function App(): JSX.Element {
         {mostrarResultados && !camposVazios ? (
           <div className="flex flex-col text-zinc-200 w-96">
             <div className="flex gap-2 items-center justify-between">
+              <p className="text-zinc-500">Impressão: </p>
+              <span className="font-bold text-lg"> {opcaoImpressao}</span>
+            </div>
+            <div className="flex gap-2 items-center justify-between">
               <p className="text-zinc-500">Quantidade de folhas: </p>
-              <span className="font-bold text-lg">{Math.ceil(resultadoUm)}</span>
+              <span className="font-bold text-lg">
+                {Math.ceil(resultadoUm)}
+              </span>
             </div>
             <div className="flex gap-2 items-center justify-between">
               <p className="text-zinc-500">Quantidade de folhas sugerido: </p>
-              <span className="font-bold text-lg">{Math.ceil(resultadoUm + 100)}</span>
+              <span className="font-bold text-lg">
+                {Math.ceil(resultadoUm + 100)}
+              </span>
             </div>
             <div className="flex gap-2 items-center justify-between">
               <p className="text-zinc-500">Tiragem de maquina: </p>
-              <span className="font-bold text-lg">{Math.ceil(resultadoDois)}</span>
+              <span className="font-bold text-lg">
+                {Math.ceil(resultadoDois)}
+              </span>
             </div>
           </div>
         ) : (
